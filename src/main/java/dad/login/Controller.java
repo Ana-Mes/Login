@@ -38,7 +38,7 @@ public class Controller {
 	private void onAccederAction(ActionEvent e) {
 		AuthService auth = model.UseLdap() ? new LdapAuthService() : new FileAuthService();
 		try {
-			if(model.getPassword() != null && auth.login(model.getNombre(), model.getPassword())) {
+			if(model.getPassword() != null && model.getNombre() != null && auth.login(model.getNombre(), model.getPassword())) {
 				
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Iniciar sesión");
@@ -60,6 +60,7 @@ public class Controller {
 			alert.setTitle("Error");
 			alert.setHeaderText("Error");
 			alert.setContentText(e1.getMessage());
+			alert.showAndWait();
 			e1.printStackTrace();
 		}
 		
