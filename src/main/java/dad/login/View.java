@@ -34,6 +34,8 @@ public class View extends VBox{
 		accederButton = new Button("Acceder");
 		cancelarButton = new Button("Cancelar");
 		
+		accederButton.setDefaultButton(true);
+			
 		GridPane accesoPane = new GridPane();
 		accesoPane.setHgap(5);
 		accesoPane.setVgap(5);

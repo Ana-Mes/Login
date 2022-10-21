@@ -17,7 +17,7 @@ public class Controller {
 		//bindings
 		
 		model.nombreProperty().bind(view.getNombreText().textProperty());
-		model.passwordProperty().bind(view.getPasswordField().textProperty());
+		model.passwordProperty().bindBidirectional(view.getPasswordField().textProperty());
 		model.useLdapProperty().bind(view.getLdapBox().selectedProperty());
 
 		//listeners
@@ -38,13 +38,14 @@ public class Controller {
 	private void onAccederAction(ActionEvent e) {
 		AuthService auth = model.UseLdap() ? new LdapAuthService() : new FileAuthService();
 		try {
-			if(auth.login(model.getNombre(), model.getPassword())) {
+			if(model.getPassword() != null && auth.login(model.getNombre(), model.getPassword())) {
 				
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Iniciar sesión");
 				alert.setHeaderText("Acceso permitido");
 				alert.setContentText("Las credenciales de acceso son válidas");
 				alert.showAndWait();
+				LoginApp.primaryStage.close();
 				
 			}else {
 				Alert alert = new Alert(AlertType.ERROR);
@@ -52,8 +53,13 @@ public class Controller {
 				alert.setHeaderText("Acceso denegado");
 				alert.setContentText("El usuario y/o la contraseña no son válidos");
 				alert.showAndWait();
+				model.setPassword(null);
 			}
 		} catch (Exception e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Error");
+			alert.setContentText(e1.getMessage());
 			e1.printStackTrace();
 		}
 		
